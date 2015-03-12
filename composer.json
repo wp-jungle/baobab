@@ -1,0 +1,25 @@
+{
+    "name": "marvinlabs/baobab",
+    "type": "library",
+    "description": "Doctrine2 behavioral extensions",
+    "homepage": "http://marvinlabs.com/",
+    "license": "Apache v2",
+    "authors": [
+        {
+            "name" : "Thomas Lartaud",
+            "email" : "contact@thomaslartaud.com",
+            "homepage" : "http://thomaslartaud.com/"
+        },
+        {
+            "name" : "Vincent Mimoun-Prat",
+            "email" : "contact@vincentprat.info",
+            "homepage" : "http://vincentprat.info/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+    },
+    "autoload": {
+        "psr-0": { "Baobab\\": "src/" }
+    }
+}
