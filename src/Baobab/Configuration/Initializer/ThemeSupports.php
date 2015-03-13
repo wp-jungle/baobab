@@ -2,7 +2,6 @@
 
 namespace Baobab\Configuration\Initializer;
 
-
 /**
  * Class ThemeSupports
  * @package Baobab\Configuration\Initializer

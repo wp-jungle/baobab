@@ -2,6 +2,8 @@
 
 namespace Baobab\Configuration\Initializer;
 
+use Baobab\Helper\Strings;
+
 /**
  * Class MenuLocations
  * @package Baobab\Configuration\Initializer
@@ -30,7 +32,7 @@ class MenuLocations extends AbstractInitializer
         $data = $this->getData();
         foreach ($data as $slug => $desc)
         {
-            $locations[$slug] = $desc;
+            $locations[$slug] = Strings::translate($desc);
         }
         register_nav_menus($locations);
     }

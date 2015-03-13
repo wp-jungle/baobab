@@ -17,4 +17,16 @@ class Strings
         return ucwords(str_replace(array('-', '_'), ' ', $slug));
     }
 
+    /**
+     * Force translation of a string (useful if the string has been loaded before the i18n files have been loaded
+     *
+     * @param $str The string to translate
+     *
+     * @return string The translated string
+     */
+    public static function translate($str)
+    {
+        return __($str, BAOBAB_TEXTDOMAIN);
+    }
+
 }

@@ -73,6 +73,9 @@ class ImageSizes extends AbstractInitializer
             }
 
             $new[$slug] = isset($props['mediaLabel']) ? $props['mediaLabel'] : Strings::labelizeSlug($slug);
+
+            // Internationalize what has to be
+            $new[$slug] = Strings::translate($new[$slug]);
         }
 
         return array_merge($sizes, $new);

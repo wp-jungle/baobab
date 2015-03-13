@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vprat
- * Date: 13/03/2015
- * Time: 10:07
- */
 
 namespace Baobab\Configuration;
 
@@ -12,10 +6,17 @@ use Baobab\Configuration\Exception\ConfigurationNotFoundException;
 use Baobab\Configuration\Parser\PhpParser;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Paths;
+use Baobab\Theme\Exception\ThemeDeclarationException;
 
+/**
+ * Class Configuration
+ * @package Baobab\Configuration
+ *
+ *          Parses and applies the theme configuration files
+ */
 class Configuration
 {
-
+    /** The namespace where we find our core initializers */
     const DEFAULT_INITIALIZER_NS = '\Baobab\Configuration\Initializer';
 
     //------------------------------------------------------------------------------------------------------------------
@@ -39,6 +40,7 @@ class Configuration
         );
 
         $finalMapping = array_merge($defaultMapping, $mapping);
+
         return new Configuration($finalMapping);
     }
 
@@ -82,9 +84,6 @@ class Configuration
 
             $this->initializers[$file] = new $className($data);
         }
-
-        // Register the hook to configure the theme
-        Hooks::action('after_theme_setup', $this, 'apply', 1);
     }
 
     /**

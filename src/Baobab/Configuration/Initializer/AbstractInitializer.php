@@ -27,4 +27,11 @@ abstract class AbstractInitializer implements Initializer
         return $this->data;
     }
 
+    /**
+     * Apply the data to configure the theme
+     */
+    public function run()
+    {
+        // Does nothing by default
+    }
 }
