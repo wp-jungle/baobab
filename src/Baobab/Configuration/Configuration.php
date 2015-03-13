@@ -1,0 +1,94 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: vprat
+ * Date: 13/03/2015
+ * Time: 10:07
+ */
+
+namespace Baobab\Configuration;
+
+use Baobab\Configuration\Exception\ConfigurationNotFoundException;
+use Baobab\Configuration\Parser\PhpParser;
+use Baobab\Helper\Hooks;
+use Baobab\Helper\Paths;
+
+class Configuration
+{
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configuration factory
+
+    /**
+     * Create the theme configuration. The object will be created and configuration files will be parsed.
+     *
+     * @param array $mapping   The mapping between configuration files and classes. Some default values are provided and
+     *                         the parameter will be merged with the default mappings.
+     *
+     * @return Configuration The configuration object
+     */
+    public static function create($mapping = array())
+    {
+        $defaultMapping = array(
+        );
+        $finalMapping = array_merge($defaultMapping, $mapping);
+
+        return new Configuration($finalMapping);
+    }
+
+    /** @var array Array of Initializer objects */
+    protected $initializers = array();
+
+    /**
+     * Hidden constructor. Use Configuration::setup
+     *
+     * @param array $mapping The mapping between configuration files and classes.
+     *
+     * @throws ConfigurationNotFoundException
+     */
+    protected function __construct($mapping)
+    {
+        // Supported parsers for configuration files
+        $parsers = array(
+            'config.php' => new PhpParser()
+        );
+
+        // Parse each file
+        foreach ($mapping as $file => $className)
+        {
+            $fullPath = Paths::configuration($file);
+            $data = null;
+
+            /** @var \Baobab\Configuration\Parser\Parser $parser */
+            foreach ($parsers as $ext => $parser)
+            {
+                if (file_exists($fullPath . '.' . $ext))
+                {
+                    $data = $parser->parse($fullPath);
+                    break;
+                }
+            }
+
+            if ($data == null)
+            {
+                throw new ConfigurationNotFoundException($file);
+            }
+
+            $this->initializers[$file] = new $className($data);
+        }
+
+        // Register the hook to configure the theme
+        Hooks::action('after_theme_setup', $this, 'apply', 1);
+    }
+
+    /**
+     * Apply the configuration
+     */
+    public function apply()
+    {
+        foreach ($this->initializers as $id => $initializer)
+        {
+            $initializer->run();
+        }
+    }
+}
