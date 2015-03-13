@@ -5,6 +5,12 @@ namespace Baobab\Configuration\Initializer;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Strings;
 
+/**
+ * Class ImageSizes
+ * @package Baobab\Configuration\Initializer
+ *
+ *          Initialises all the theme's image sizes
+ */
 class ImageSizes extends AbstractInitializer
 {
 

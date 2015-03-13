@@ -16,6 +16,8 @@ use Baobab\Helper\Paths;
 class Configuration
 {
 
+    const DEFAULT_INITIALIZER_NS = '\Baobab\Configuration\Initializer';
+
     //------------------------------------------------------------------------------------------------------------------
     // Configuration factory
 
@@ -30,9 +32,13 @@ class Configuration
     public static function create($mapping = array())
     {
         $defaultMapping = array(
+            'image-sizes'    => self::DEFAULT_INITIALIZER_NS . '\ImageSizes',
+            'widget-areas'   => self::DEFAULT_INITIALIZER_NS . '\WidgetAreas',
+            'menu-locations' => self::DEFAULT_INITIALIZER_NS . '\MenuLocations',
+            'theme-supports' => self::DEFAULT_INITIALIZER_NS . '\ThemeSupports'
         );
-        $finalMapping = array_merge($defaultMapping, $mapping);
 
+        $finalMapping = array_merge($defaultMapping, $mapping);
         return new Configuration($finalMapping);
     }
 
