@@ -2,11 +2,9 @@
 
 namespace Baobab\Theme\Exception;
 
-    /**
-     * Thrown when a file was not found
-     *
-     * @author Bernhard Schussek <bschussek@gmail.com>
-     */
+/**
+ * Thrown when the theme child class is not properly defined
+ */
 class ThemeDeclarationException extends \RuntimeException
 {
     /**
