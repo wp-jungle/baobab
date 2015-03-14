@@ -19,8 +19,6 @@ class Configuration
     /** The namespace where we find our core initializers */
     const DEFAULT_INITIALIZER_NS = '\Baobab\Configuration\Initializer';
 
-    /** The default initializer mapping */
-
     //------------------------------------------------------------------------------------------------------------------
     // Configuration factory
 
@@ -35,12 +33,14 @@ class Configuration
     public static function create($mapping = array())
     {
         $defaultMapping = array(
-            'theme-settings' => self::DEFAULT_INITIALIZER_NS . '\ThemeSettings',
-            'image-sizes'    => self::DEFAULT_INITIALIZER_NS . '\ImageSizes',
-            'widget-areas'   => self::DEFAULT_INITIALIZER_NS . '\WidgetAreas',
-            'menu-locations' => self::DEFAULT_INITIALIZER_NS . '\MenuLocations',
-            'theme-supports' => self::DEFAULT_INITIALIZER_NS . '\ThemeSupports',
-            'templates'      => self::DEFAULT_INITIALIZER_NS . '\Templates'
+            'autoload'         => self::DEFAULT_INITIALIZER_NS . '\Autoload',
+            'dependencies'     => self::DEFAULT_INITIALIZER_NS . '\Dependencies',
+            'general-settings' => self::DEFAULT_INITIALIZER_NS . '\ThemeSettings',
+            'image-sizes'      => self::DEFAULT_INITIALIZER_NS . '\ImageSizes',
+            'widget-areas'     => self::DEFAULT_INITIALIZER_NS . '\WidgetAreas',
+            'menu-locations'   => self::DEFAULT_INITIALIZER_NS . '\MenuLocations',
+            'theme-supports'   => self::DEFAULT_INITIALIZER_NS . '\ThemeSupports',
+            'templates'        => self::DEFAULT_INITIALIZER_NS . '\Templates'
         );
 
         $finalMapping = array_merge($defaultMapping, $mapping);
@@ -81,12 +81,13 @@ class Configuration
                 }
             }
 
-            if ($data == null)
+            if ($data != null)
             {
-                throw new ConfigurationNotFoundException($file);
-            }
+                $this->initializers[$file] = new $className($data);
 
-            $this->initializers[$file] = new $className($data);
+                // Provide some hooks
+                do_action('baobab/configuration/file-loaded?file=' . $file);
+            }
         }
     }
 
@@ -97,7 +98,9 @@ class Configuration
     {
         foreach ($this->initializers as $id => $initializer)
         {
+            do_action('baobab/configuration/before-initializer?id=' . $id);
             $initializer->run();
+            do_action('baobab/configuration/after-initializer?id=' . $id);
         }
     }
 }

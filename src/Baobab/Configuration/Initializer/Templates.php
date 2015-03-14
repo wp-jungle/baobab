@@ -4,6 +4,7 @@ namespace Baobab\Configuration\Initializer;
 
 use Baobab\Blade\Extension;
 use Baobab\Blade\WordPressLoopExtension;
+use Baobab\Facade\Baobab;
 use Baobab\Helper\Paths;
 use Baobab\Helper\Strings;
 use Philo\Blade\Blade;
@@ -61,6 +62,9 @@ class Templates extends AbstractInitializer
             {
                 $ext->register($compiler);
             }
+
+            // Set the blade engine in the facade
+            Baobab::setBlade($blade);
         }
     }
 

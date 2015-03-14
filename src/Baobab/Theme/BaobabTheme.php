@@ -3,8 +3,9 @@
 namespace Baobab\Theme;
 
 use Baobab\Configuration\Configuration;
+use Baobab\Facade\Baobab;
 use Baobab\Helper\Hooks;
-use Philo\Blade\Blade;
+use Baobab\Theme\Exception\ThemeDeclarationException;
 
 /**
  * Class Theme
@@ -53,17 +54,35 @@ abstract class BaobabTheme
      */
     protected function __construct()
     {
+        // Gather some variables from the child class
+        $this->loadStaticChildClassMembers();
+
         // Load configuration
         $this->configuration = Configuration::create(static::$configurationMappings);
 
         // Load text domain
-        Hooks::action('after_setup_theme', $this, 'bootstrap', 5);
+        Hooks::action('after_setup_theme', $this, 'setup', 5);
     }
 
-    public function bootstrap()
+    /**
+     * Function that is run by the 'after_setup_theme' WordPress hook. Basically loads the configuration.
+     */
+    public function setup()
     {
         // Apply configuration
         $this->configuration->apply();
     }
 
+    /**
+     * Gather some variables from the child class
+     */
+    protected function loadStaticChildClassMembers()
+    {
+        if (is_null(static::$classLoader))
+        {
+            throw new ThemeDeclarationException('You must specify a class loader in your child theme class');
+        }
+
+        Baobab::setClassLoader(static::$classLoader);
+    }
 }
