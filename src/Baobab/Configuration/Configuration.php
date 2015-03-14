@@ -19,6 +19,8 @@ class Configuration
     /** The namespace where we find our core initializers */
     const DEFAULT_INITIALIZER_NS = '\Baobab\Configuration\Initializer';
 
+    /** The default initializer mapping */
+
     //------------------------------------------------------------------------------------------------------------------
     // Configuration factory
 
@@ -33,10 +35,12 @@ class Configuration
     public static function create($mapping = array())
     {
         $defaultMapping = array(
+            'theme-settings' => self::DEFAULT_INITIALIZER_NS . '\ThemeSettings',
             'image-sizes'    => self::DEFAULT_INITIALIZER_NS . '\ImageSizes',
             'widget-areas'   => self::DEFAULT_INITIALIZER_NS . '\WidgetAreas',
             'menu-locations' => self::DEFAULT_INITIALIZER_NS . '\MenuLocations',
-            'theme-supports' => self::DEFAULT_INITIALIZER_NS . '\ThemeSupports'
+            'theme-supports' => self::DEFAULT_INITIALIZER_NS . '\ThemeSupports',
+            'templates'      => self::DEFAULT_INITIALIZER_NS . '\Templates'
         );
 
         $finalMapping = array_merge($defaultMapping, $mapping);
