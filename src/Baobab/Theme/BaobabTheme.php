@@ -4,8 +4,7 @@ namespace Baobab\Theme;
 
 use Baobab\Configuration\Configuration;
 use Baobab\Helper\Hooks;
-use Baobab\Helper\Paths;
-use Baobab\Theme\Exception\ThemeDeclarationException;
+use Philo\Blade\Blade;
 
 /**
  * Class Theme
@@ -18,7 +17,6 @@ abstract class BaobabTheme
     //------------------------------------------------------------------------------------------------------------------
     // You must override these in your main theme class
 
-    public static $textDomain = null;
     public static $instance = null;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -38,23 +36,10 @@ abstract class BaobabTheme
     {
         if (is_null(static::$instance))
         {
-            self::checkRequiredStaticFields();
-            self::defineConstants();
-
             static::$instance = new static();
         }
 
         return static::$instance;
-    }
-
-    /**
-     * Access the text domain defined by our child class
-     *
-     * @return string The text domain
-     */
-    public static function textDomain()
-    {
-        return static::$textDomain;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -77,41 +62,8 @@ abstract class BaobabTheme
 
     public function bootstrap()
     {
-        // Load translations
-        $this->loadTextDomain();
-
         // Apply configuration
         $this->configuration->apply();
-    }
-
-    /**
-     * Load the theme translations
-     */
-    protected function loadTextDomain()
-    {
-        load_theme_textdomain(BAOBAB_TEXTDOMAIN, Paths::theme('languages'));
-    }
-
-    /**
-     * Check that the mandatory static fields are properly overridden
-     *
-     * @throws ThemeDeclarationException When the child class fails to declare some required properties
-     */
-    protected static function checkRequiredStaticFields()
-    {
-        if (is_null(static::$textDomain))
-        {
-            throw new ThemeDeclarationException(
-                'You must declare the text domain in your BaobabTheme child class as a static property');
-        }
-    }
-
-    /**
-     * Turn some of the class static members into constants for performance
-     */
-    protected static function defineConstants()
-    {
-        define('BAOBAB_TEXTDOMAIN', static::$textDomain);
     }
 
 }
