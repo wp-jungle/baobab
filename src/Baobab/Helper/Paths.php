@@ -73,4 +73,21 @@ class Paths
 
         return apply_filters('baobab/paths/config', self::theme($path), $innerPath);
     }
+
+    /**
+     * @param string $innerPath The path to append to the directory without leading slash
+     *
+     * @return string The absolute path to the baobab framework
+     */
+    public static function baobabFramework($innerPath = '')
+    {
+        $path = untrailingslashit(dirname(dirname(dirname(dirname(__FILE__)))));
+
+        if (!empty($innerPath)) {
+            $innerPath = untrailingslashit($innerPath);
+            $path .= '/' . $innerPath;
+        }
+
+        return $path;
+    }
 }
