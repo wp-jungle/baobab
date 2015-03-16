@@ -10,7 +10,8 @@ namespace Baobab\Blade;
 
 use Illuminate\View\Compilers\BladeCompiler;
 
-class WordPressLoopExtension implements Extension {
+class WordPressLoopExtension implements Extension
+{
 
     /**
      * Register the extension in the compiler
@@ -25,32 +26,49 @@ class WordPressLoopExtension implements Extension {
     }
 
     /**
-     * @wpquery
+     * @wploop
      *
      * @param BladeCompiler $compiler The blade compiler to extend
      */
     private function registerStartLoopQuery($compiler)
     {
-        $compiler->extend(function($value, $view) {
-            $pattern = '/(\s*)@wpquery(\s*\(.*\))/';
-            $replacement  = '$1<?php $bladequery = new WP_Query$2; ';
-            $replacement .= 'if ( $bladequery->have_posts() ) : ';
-            $replacement .= 'while ( $bladequery->have_posts() ) : ';
-            $replacement .= '$bladequery->the_post(); ?> ';
-            return preg_replace( $pattern, $replacement, $value );
-        });
+        $compiler->extend(
+        /**
+         * @param string        $view The view currently being rendered
+         * @param BladeCompiler $comp The compiler currently used
+         *
+         * @return string The compiled view
+         */
+            function ($view, $comp)
+            {
+                $pattern = $comp->createPlainMatcher('wploop');
+                $replacement = '$1<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?> ';
+
+                return preg_replace($pattern, $replacement, $view);
+            });
     }
 
     /**
-     * @wpempty
+     * @emptyloop
      *
      * @param BladeCompiler $compiler The blade compiler to extend
      */
     private function registerEmptyLoopBranch($compiler)
     {
-        $compiler->extend(function($value, $view) {
-            return str_replace('@wpempty', '<?php endwhile; ?><?php else: ?>', $value);
-        });
+        $compiler->extend(
+        /**
+         * @param string        $view The view currently being rendered
+         * @param BladeCompiler $comp The compiler currently used
+         *
+         * @return string The compiled view
+         */
+            function ($view, $comp)
+            {
+                $pattern = $comp->createPlainMatcher('emptywploop');
+                $replacement = '$1<?php endwhile; ?><?php else: ?>';
+
+                return preg_replace($pattern, $replacement, $view);
+            });
     }
 
     /**
@@ -60,8 +78,19 @@ class WordPressLoopExtension implements Extension {
      */
     private function registerEndLoop($compiler)
     {
-        $compiler->extend(function($value, $view) {
-            return str_replace('@wpend', '<?php endif; wp_reset_postdata(); ?>', $value);
-        });
+        $compiler->extend(
+        /**
+         * @param string        $view The view currently being rendered
+         * @param BladeCompiler $comp The compiler currently used
+         *
+         * @return string The compiled view
+         */
+            function ($view, $comp)
+            {
+                $pattern = $comp->createPlainMatcher('endwploop');
+                $replacement = '$1<?php endif; wp_reset_postdata(); ?>';
+
+                return preg_replace($pattern, $replacement, $view);
+            });
     }
 }
