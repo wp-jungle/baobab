@@ -55,7 +55,9 @@ class Templates extends AbstractInitializer
             /** @var \Illuminate\View\Compilers\BladeCompiler $compiler */
             $compiler = $blade->getCompiler();
             $extensions = array(
-                new WordPressLoopExtension()
+                new WordPressLoopExtension(),
+                new WordPressQueryExtension(),
+                new WordPressShortcodeExtension()
             );
 
             /** @var Extension $ext */
