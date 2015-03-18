@@ -4,9 +4,10 @@ namespace Baobab\Configuration\Initializer;
 
 use Baobab\Blade\Extension;
 use Baobab\Blade\WordPressLoopExtension;
+use Baobab\Blade\WordPressQueryExtension;
+use Baobab\Blade\WordPressShortcodeExtension;
 use Baobab\Facade\Baobab;
 use Baobab\Helper\Paths;
-use Baobab\Helper\Strings;
 use Philo\Blade\Blade;
 
 /**

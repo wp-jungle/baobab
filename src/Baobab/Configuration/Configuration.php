@@ -40,6 +40,7 @@ class Configuration
             'widget-areas'     => self::DEFAULT_INITIALIZER_NS . '\WidgetAreas',
             'menu-locations'   => self::DEFAULT_INITIALIZER_NS . '\MenuLocations',
             'theme-supports'   => self::DEFAULT_INITIALIZER_NS . '\ThemeSupports',
+            'assets'           => self::DEFAULT_INITIALIZER_NS . '\Assets',
             'templates'        => self::DEFAULT_INITIALIZER_NS . '\Templates'
         );
 
