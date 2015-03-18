@@ -56,11 +56,14 @@ class Assets extends AbstractInitializer
     {
         $data = $this->getData();
 
+        // Read the assets manifest file if it exists
+        $manifest = $this->loadManifest();
+
         if (isset($data['styles']))
         {
             foreach ($data['styles'] as $handle => $props)
             {
-                $this->handleStyleAction('register', $handle, $props);
+                $this->handleStyleAction('register', $handle, $props, $manifest);
             }
         }
 
@@ -68,7 +71,7 @@ class Assets extends AbstractInitializer
         {
             foreach ($data['scripts'] as $handle => $props)
             {
-                $this->handleScriptAction('register', $handle, $props);
+                $this->handleScriptAction('register', $handle, $props, $manifest);
             }
         }
     }
@@ -103,7 +106,15 @@ class Assets extends AbstractInitializer
         }
     }
 
-    private function handleStyleAction($actionType, $handle, $props)
+    /**
+     * Do something with an asset
+     *
+     * @param string       $actionType Either 'register' or 'enqueue'
+     * @param string       $handle     The handle of the asset
+     * @param string|array $props      The properties describing the asset
+     * @param object|null  $manifest   The asset manifest file if it exists
+     */
+    private function handleStyleAction($actionType, $handle, $props, $manifest = null)
     {
         // Handle short declaration style
         if (is_string($props))
@@ -124,6 +135,12 @@ class Assets extends AbstractInitializer
         $predicate = $props['predicate'];
         if ($props['src'] !== null && ($predicate == null || $predicate() == true))
         {
+            // Set the version number from the manifest if it specifies one
+            if ($manifest != null && isset($manifest[$handle]) && isset($manifest[$handle]['hash']))
+            {
+                $props['ver'] = $manifest[$handle]['hash'];
+            }
+
             switch ($actionType)
             {
                 case 'register':
@@ -136,7 +153,15 @@ class Assets extends AbstractInitializer
         }
     }
 
-    private function handleScriptAction($actionType, $handle, $props)
+    /**
+     * Do something with an asset
+     *
+     * @param string       $actionType Either 'register' or 'enqueue'
+     * @param string       $handle     The handle of the asset
+     * @param string|array $props      The properties describing the asset
+     * @param object|null  $manifest   The asset manifest file if it exists
+     */
+    private function handleScriptAction($actionType, $handle, $props, $manifest = null)
     {
         // Handle short declaration style
         if (is_string($props))
@@ -157,6 +182,12 @@ class Assets extends AbstractInitializer
         $predicate = $props['predicate'];
         if ($props['src'] !== null && ($predicate == null || $predicate() == true))
         {
+            // Set the version number from the manifest if it specifies one
+            if ($manifest != null && isset($manifest[$handle]) && isset($manifest[$handle]['hash']))
+            {
+                $props['ver'] = $manifest[$handle]['hash'];
+            }
+
             switch ($actionType)
             {
                 case 'register':
@@ -167,5 +198,22 @@ class Assets extends AbstractInitializer
                     break;
             }
         }
+    }
+
+    /**
+     * Read the manifest file that can be found at the root of the theme's asset folder.
+     *
+     * @return object|null null if the file does not exist or an object representing the manifest data
+     */
+    protected function loadManifest()
+    {
+        $manifestPath = Paths::assets('manifest.json');
+
+        if (file_exists($manifestPath))
+        {
+            return json_decode(file_get_contents($manifestPath), true);
+        }
+
+        return null;
     }
 }
