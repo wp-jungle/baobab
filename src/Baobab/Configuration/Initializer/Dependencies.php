@@ -21,11 +21,12 @@ class Dependencies extends AbstractInitializer
     /**
      * Constructor
      *
-     * @param array $data The configuration key/value pairs
+     * @param string $id   The ID of the initializer
+     * @param array  $data The configuration key/value pairs
      */
-    public function __construct($data)
+    public function __construct($id, $data)
     {
-        parent::__construct($data);
+        parent::__construct($id, $data);
 
         require_once(Paths::baobabFramework('vendor/tgm/plugin-activation/class-tgm-plugin-activation.php'));
         Hooks::action('tgmpa_register', $this, 'configureTgmPluginActivationLibrary');

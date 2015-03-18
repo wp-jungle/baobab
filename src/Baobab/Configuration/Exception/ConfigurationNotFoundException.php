@@ -3,9 +3,7 @@
 namespace Baobab\Configuration\Exception;
 
     /**
-     * Thrown when a file was not found
-     *
-     * @author Bernhard Schussek <bschussek@gmail.com>
+     * Thrown when a configuration file was not found
      */
 class ConfigurationNotFoundException extends \RuntimeException
 {

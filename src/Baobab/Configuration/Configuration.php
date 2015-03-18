@@ -3,6 +3,8 @@
 namespace Baobab\Configuration;
 
 use Baobab\Configuration\Exception\ConfigurationNotFoundException;
+use Baobab\Configuration\Exception\UnknownSectionException;
+use Baobab\Configuration\Initializer\Initializer;
 use Baobab\Configuration\Parser\PhpParser;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Paths;
@@ -49,7 +51,7 @@ class Configuration
         return new Configuration($finalMapping);
     }
 
-    /** @var array Array of Initializer objects */
+    /** @var Initializer[] Array of Initializer objects */
     protected $initializers = array();
 
     /**
@@ -84,7 +86,7 @@ class Configuration
 
             if ($data != null)
             {
-                $this->initializers[$file] = new $className($data);
+                $this->initializers[$file] = new $className($file, $data);
 
                 // Provide some hooks
                 do_action('baobab/configuration/file-loaded?file=' . $file);
@@ -103,5 +105,43 @@ class Configuration
             $initializer->run();
             do_action('baobab/configuration/after-initializer?id=' . $id);
         }
+    }
+
+    /**
+     * Get the value of a setting in the configuration. If that setting is not found, an exception will be thrown.
+     *
+     * @param string $section      The configuration section where to find the setting
+     * @param string $key          The key of the setting we are interested about
+     *
+     * @return mixed The setting value
+     */
+    public function getOrThrow($section, $key)
+    {
+        if ( !isset($this->initializers[$section]))
+        {
+            throw new UnknownSectionException($section);
+        }
+
+        return $this->initializers[$section]->getSettingOrThrow($key);
+    }
+
+    /**
+     * Get the value of a setting in the configuration. If that setting is not found, return the provided
+     * default value.
+     *
+     * @param string $section      The configuration section where to find the setting
+     * @param string $key          The key of the setting we are interested about
+     * @param mixed  $defaultValue The default value to return if not found
+     *
+     * @return mixed The setting value or the default value
+     */
+    public function get($section, $key, $defaultValue = null)
+    {
+        if ( !isset($this->initializers[$section]))
+        {
+            return $defaultValue;
+        }
+
+        return $this->initializers[$section]->getSetting($key, $defaultValue);
     }
 }

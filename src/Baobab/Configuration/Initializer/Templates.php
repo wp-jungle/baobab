@@ -22,11 +22,12 @@ class Templates extends AbstractInitializer
     /**
      * Constructor
      *
-     * @param array $data The configuration key/value pairs
+     * @param string $id   The ID of the initializer
+     * @param array  $data The configuration key/value pairs
      */
-    public function __construct($data)
+    public function __construct($id, $data)
     {
-        parent::__construct($data);
+        parent::__construct($id, $data);
 
         // If blade is enabled, include required files
         if ($this->isBladeEnabled())

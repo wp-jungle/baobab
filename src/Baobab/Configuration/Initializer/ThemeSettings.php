@@ -17,11 +17,12 @@ class ThemeSettings extends AbstractInitializer
     /**
      * Constructor
      *
-     * @param array $data The configuration key/value pairs
+     * @param string $id   The ID of the initializer
+     * @param array  $data The configuration key/value pairs
      */
-    public function __construct($data)
+    public function __construct($id, $data)
     {
-        parent::__construct($data);
+        parent::__construct($id, $data);
 
         // Define the theme text domain constant as early as possible
         if ( !isset($data['text_domain']))

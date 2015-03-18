@@ -40,11 +40,12 @@ class Assets extends AbstractInitializer
     /**
      * Constructor
      *
-     * @param array $data The configuration key/value pairs
+     * @param string $id   The ID of the initializer
+     * @param array  $data The configuration key/value pairs
      */
-    public function __construct($data)
+    public function __construct($id, $data)
     {
-        parent::__construct($data);
+        parent::__construct($id, $data);
         Hooks::action('wp_enqueue_scripts', $this, 'registerAssets', 99);
         Hooks::action('wp_enqueue_scripts', $this, 'enqueueAssets', 100);
     }

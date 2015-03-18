@@ -2,6 +2,7 @@
 
 namespace Baobab\Facade;
 
+use Baobab\Configuration\Configuration;
 use Composer\Autoload\ClassLoader;
 use Philo\Blade\Blade;
 
@@ -18,6 +19,17 @@ class Baobab
 
     /** @var ClassLoader */
     private static $classLoader = null;
+
+    /** @var Configuration */
+    private static $configuration = null;
+
+    /**
+     * @return Configuration
+     */
+    public static function configuration()
+    {
+        return self::$configuration;
+    }
 
     /**
      * @return Blade
@@ -49,6 +61,14 @@ class Baobab
     public static function setClassLoader($classLoader)
     {
         self::$classLoader = $classLoader;
+    }
+
+    /**
+     * @param Configuration $configuration
+     */
+    public static function setConfiguration($configuration)
+    {
+        self::$configuration = $configuration;
     }
 
 
