@@ -90,7 +90,7 @@ class ThemeSettings extends AbstractInitializer
     private function restrictAdminPanelAccess()
     {
         // Don't restrict anything when doing AJAX or CLI stuff
-        if ((defined('DOING_AJAX') && DOING_AJAX) || (defined('WP_CLI') && WP_CLI))
+        if ((defined('DOING_AJAX') && DOING_AJAX) || (defined('WP_CLI') && WP_CLI) || !is_user_logged_in())
         {
             return;
         }
