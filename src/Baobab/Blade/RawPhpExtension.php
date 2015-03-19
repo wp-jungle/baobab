@@ -10,7 +10,7 @@ namespace Baobab\Blade;
 
 use Illuminate\View\Compilers\BladeCompiler;
 
-class WordPressShortcodeExtension implements Extension
+class RawPhpExtension implements Extension
 {
 
     /**
@@ -20,7 +20,7 @@ class WordPressShortcodeExtension implements Extension
      */
     public function register($compiler)
     {
-        $this->registerDoShortcode($compiler);
+        $this->registerRawPhpBraces($compiler);
     }
 
     /**
@@ -28,7 +28,7 @@ class WordPressShortcodeExtension implements Extension
      *
      * @param BladeCompiler $compiler The blade compiler to extend
      */
-    private function registerDoShortcode($compiler)
+    private function registerRawPhpBraces($compiler)
     {
         $compiler->extend(
         /**
@@ -39,10 +39,7 @@ class WordPressShortcodeExtension implements Extension
          */
             function ($view, $comp)
             {
-                $pattern = $comp->createMatcher('shortcode');
-                $replacement = '$1<?php do_shortcode($2); ?> ';
-
-                return preg_replace($pattern, $replacement, $view);
+                return preg_replace('/#\{\{\s*(.+?)\s*\}\}/s', '<?php $1; ?>', $view);
             });
     }
 }
