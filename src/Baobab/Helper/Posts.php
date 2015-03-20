@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vprat
- * Date: 16/03/2015
- * Time: 19:11
- */
 
 namespace Baobab\Helper;
 
