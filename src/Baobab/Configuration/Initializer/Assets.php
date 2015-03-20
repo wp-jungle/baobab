@@ -134,7 +134,7 @@ class Assets extends AbstractInitializer
 
         // Register the script if we have an src and the predicate is true
         $predicate = $props['predicate'];
-        if ($props['src'] !== null && ($predicate == null || $predicate() == true))
+        if ($props['src'] !== null && ($predicate == null || !is_callable($predicate) || $predicate() == true))
         {
             // Set the version number from the manifest if it specifies one
             if ($manifest != null && isset($manifest[$handle]) && isset($manifest[$handle]['hash']))
@@ -181,7 +181,7 @@ class Assets extends AbstractInitializer
 
         // Register the script if we have an src and the predicate is true
         $predicate = $props['predicate'];
-        if ($props['src'] !== null && ($predicate == null || $predicate() == true))
+        if ($props['src'] !== null && ($predicate == null || !is_callable($predicate) || $predicate() == true))
         {
             // Set the version number from the manifest if it specifies one
             if ($manifest != null && isset($manifest[$handle]) && isset($manifest[$handle]['hash']))
