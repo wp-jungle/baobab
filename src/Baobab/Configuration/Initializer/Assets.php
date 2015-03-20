@@ -25,7 +25,7 @@ class Assets extends AbstractInitializer
         'ver'        => false,
         'media'      => 'all',
         'unregister' => false,
-        'predicate'  => null
+        'when'       => null
     );
 
     private static $SCRIPT_DEFAULTS = array(
@@ -34,7 +34,7 @@ class Assets extends AbstractInitializer
         'ver'        => false,
         'in_footer'  => false,
         'unregister' => false,
-        'predicate'  => null
+        'when'       => null
     );
 
     /**
@@ -133,7 +133,7 @@ class Assets extends AbstractInitializer
         }
 
         // Register the script if we have an src and the predicate is true
-        $predicate = $props['predicate'];
+        $predicate = $props['when'];
         if ($props['src'] !== null && ($predicate == null || !is_callable($predicate) || $predicate() == true))
         {
             // Set the version number from the manifest if it specifies one
@@ -180,7 +180,7 @@ class Assets extends AbstractInitializer
         }
 
         // Register the script if we have an src and the predicate is true
-        $predicate = $props['predicate'];
+        $predicate = $props['when'];
         if ($props['src'] !== null && ($predicate == null || !is_callable($predicate) || $predicate() == true))
         {
             // Set the version number from the manifest if it specifies one
