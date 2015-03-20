@@ -5,6 +5,7 @@ namespace Baobab\Theme;
 use Baobab\Configuration\Configuration;
 use Baobab\Facade\Baobab;
 use Baobab\Helper\Hooks;
+use Baobab\Loader\ObjectRegistry;
 use Baobab\Theme\Exception\ThemeDeclarationException;
 
 /**
@@ -83,6 +84,6 @@ abstract class BaobabTheme
             throw new ThemeDeclarationException('You must specify a class loader in your child theme class');
         }
 
-        Baobab::setClassLoader(static::$classLoader);
+        Baobab::setObjectRegistry(new ObjectRegistry(static::$classLoader));
     }
 }

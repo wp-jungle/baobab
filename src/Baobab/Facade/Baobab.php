@@ -2,7 +2,9 @@
 
 namespace Baobab\Facade;
 
+use Baobab\Ajax\Ajax;
 use Baobab\Configuration\Configuration;
+use Baobab\Loader\ObjectRegistry;
 use Composer\Autoload\ClassLoader;
 use Philo\Blade\Blade;
 
@@ -17,11 +19,14 @@ class Baobab
     /** @var Blade */
     private static $blade = null;
 
-    /** @var ClassLoader */
-    private static $classLoader = null;
+    /** @var ObjectRegistry */
+    private static $objectRegistry = null;
 
     /** @var Configuration */
     private static $configuration = null;
+
+    /** @var Ajax */
+    private static $ajax = null;
 
     /**
      * @return Configuration
@@ -40,11 +45,19 @@ class Baobab
     }
 
     /**
-     * @return ClassLoader
+     * @return Ajax
      */
-    public static function classLoader()
+    public static function ajax()
     {
-        return self::$classLoader;
+        return self::$ajax;
+    }
+
+    /**
+     * @return ObjectRegistry
+     */
+    public static function objectRegistry()
+    {
+        return self::$objectRegistry;
     }
 
     /**
@@ -56,11 +69,11 @@ class Baobab
     }
 
     /**
-     * @param ClassLoader $classLoader
+     * @param ObjectRegistry $objectRegistry
      */
-    public static function setClassLoader($classLoader)
+    public static function setObjectRegistry($objectRegistry)
     {
-        self::$classLoader = $classLoader;
+        self::$objectRegistry = $objectRegistry;
     }
 
     /**
@@ -71,5 +84,11 @@ class Baobab
         self::$configuration = $configuration;
     }
 
-
+    /**
+     * @param Ajax $ajax
+     */
+    public static function setAjax($ajax)
+    {
+        self::$ajax = $ajax;
+    }
 }

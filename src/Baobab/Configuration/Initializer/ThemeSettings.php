@@ -2,9 +2,12 @@
 
 namespace Baobab\Configuration\Initializer;
 
+use Baobab\Ajax\Ajax;
 use Baobab\Configuration\Exception\InvalidConfigurationException;
+use Baobab\Facade\Baobab;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Paths;
+use Baobab\Helper\Strings;
 
 /**
  * Class ThemeSettings
@@ -35,6 +38,9 @@ class ThemeSettings extends AbstractInitializer
         // Some restrictions
         $this->restrictAdminBarVisibility();
         $this->restrictAdminPanelAccess();
+
+        // Ajax
+        $this->setupAjax();
     }
 
     /**
@@ -119,5 +125,14 @@ class ThemeSettings extends AbstractInitializer
             wp_redirect(home_url());
             exit;
         }
+    }
+
+    private function setupAjax() {
+        $data = $this->getData();
+
+        $namespace = isset($data['ajax_namespace']) ? $data['ajax_namespace'] : Strings::sanitizeJsVarName($data['text_domain']);
+
+        $ajax = new Ajax($namespace);
+        Baobab::setAjax($ajax);
     }
 }

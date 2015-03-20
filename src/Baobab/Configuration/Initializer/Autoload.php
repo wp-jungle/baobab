@@ -20,6 +20,8 @@ use Philo\Blade\Blade;
 class Autoload extends AbstractInitializer
 {
 
+    private $objectRegistry;
+
     /**
      * Constructor
      *
@@ -29,6 +31,8 @@ class Autoload extends AbstractInitializer
     public function __construct($id, $data)
     {
         parent::__construct($id, $data);
+
+        $this->objectRegistry = Baobab::objectRegistry();
 
         $this->loadPsr4();
         Hooks::action('after_setup_theme', $this, 'instantiateClasses');
@@ -98,11 +102,9 @@ class Autoload extends AbstractInitializer
             return;
         }
 
-        /** @var \Composer\Autoload\ClassLoader $classLoader */
-        $classLoader = Baobab::classLoader();
         foreach ($group['psr4'] as $prefix => $paths)
         {
-            $classLoader->addPsr4($prefix, $paths);
+            $this->objectRegistry->addPsr4($prefix, $paths);
         }
     }
 
@@ -118,9 +120,9 @@ class Autoload extends AbstractInitializer
             return;
         }
 
-        foreach ($group['instantiate'] as $className)
+        foreach ($group['instantiate'] as $nickname => $className)
         {
-            new $className();
+            $this->objectRegistry->register($nickname, new $className());
         }
     }
 }
