@@ -55,4 +55,23 @@ class Urls
 
         return apply_filters('baobab/urls/storage', self::theme($path), $innerPath);
     }
+
+    /**
+     * @param string $innerPath The path to append to the url without leading slash
+     *
+     * @return string The url to the baobab framework
+     */
+    public static function baobabFramework($innerPath = '')
+    {
+        $baobabPath = Paths::baobabFramework();
+        $themePath= Paths::theme();
+        $path = str_replace($themePath, '', $baobabPath);
+
+        if (!empty($innerPath)) {
+            $innerPath = untrailingslashit($innerPath);
+            $path .= '/' . $innerPath;
+        }
+
+        return apply_filters('baobab/urls/storage', self::theme($path), $innerPath);
+    }
 }
