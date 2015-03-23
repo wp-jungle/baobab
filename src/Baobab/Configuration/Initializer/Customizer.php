@@ -21,7 +21,7 @@ class Customizer extends AbstractInitializer
         'color_light'   => '#8cddcd',
         'color_select'  => '#34495e',
         'color_accent'  => '#FF5740',
-        'color_back'    => '#444',
+        'color_back'    => '#343434',
         'stylesheet_id' => 'shoestrap',
     );
 
@@ -36,13 +36,12 @@ class Customizer extends AbstractInitializer
         parent::__construct($id, $data);
 
         // Boostrap Kirki
-
-        /** @noinspection PhpIncludeInspection */
-        require_once(Paths::baobabFramework('vendor/aristath/kirki/kirki.php'));
-
         Hooks::filter('kirki/config', $this, 'configureKirki');
         Hooks::filter('customize_register', $this, 'createPanels');
         Hooks::filter('kirki/controls', $this, 'registerControls');
+
+        /** @noinspection PhpIncludeInspection */
+        require_once(Paths::baobabFramework('vendor/aristath/kirki/kirki.php'));
     }
 
     /**
@@ -68,22 +67,15 @@ class Customizer extends AbstractInitializer
      */
     public function registerControls($controls)
     {
-        $controls[] = array(
-            'type'     => 'text',
-            'setting'  => 'my_setting',
-            'label'    => __('My custom control', 'translation_domain'),
-            'section'  => 'my_section',
-            'default'  => 'some-default-value',
-            'priority' => 1,
-        );
-
-        return $controls;
+        $data = $this->getData();
+        return array_merge($controls, $data['controls']);
     }
 
     /**
      * Create all panels and sections
      *
      * @param \WP_Customize_Manager $wp_customize the WP customizer
+     * @return \WP_Customize_Manager
      */
     public function createPanels($wp_customize)
     {
@@ -116,5 +108,7 @@ class Customizer extends AbstractInitializer
 
             $panelPriority += 10;
         }
+
+        return $wp_customize;
     }
 }
