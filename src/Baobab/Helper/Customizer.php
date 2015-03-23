@@ -12,6 +12,27 @@ class Customizer
 {
 
     /**
+     * Set all sections which will go to the default customizer panel. The function accepts more than 0 arguments.
+     * All arguments will define the sections of the panel.
+     *
+     * @return array
+     */
+    public static function defaultPanel()
+    {
+        $argCount = func_num_args();
+        $args = func_get_args();
+
+        $sections = array();
+        for ($i = 0; $i < $argCount; ++$i) {
+            $sections[$args[$i]['id']] = $args[$i];
+        }
+
+        return array(
+            'sections' => $sections
+        );
+    }
+
+    /**
      * Define a customizer panel. The function accepts more than 2 arguments. All arguments passed after the description
      * will define the sections of the panel.
      *

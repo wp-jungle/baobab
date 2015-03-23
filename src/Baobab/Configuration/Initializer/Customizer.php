@@ -23,6 +23,9 @@ class Customizer extends AbstractInitializer
         'color_accent'  => '#FF5740',
         'color_back'    => '#343434',
         'stylesheet_id' => 'shoestrap',
+        'default_panel' => array(
+            'panel-default' => 'General settings'
+        )
     );
 
     /**
@@ -80,18 +83,37 @@ class Customizer extends AbstractInitializer
     public function createPanels($wp_customize)
     {
         $data = $this->getData();
+
+        // Move all default sections to the default panel
+        $defaultPanel = $data['options']['default_panel'];
+        $wp_customize->add_panel($defaultPanel['id'], array(
+            'priority'    => 10,
+            'title'       => Strings::translate($defaultPanel['title']),
+            'description' => ''
+        ));
+
+        $existingSections = $wp_customize->sections();
+        /** @var WP_Customize_Section $section */
+        foreach ($existingSections as $sectionId => $section) {
+            if (empty($section->panel)) {
+                $section->panel = $defaultPanel['id'];
+            }
+        }
+
+        // Define additional panels and sections
         $panels = $data['panels'];
-
         $panelPriority = 1000;
-
         foreach ($panels as $panelProps) {
-            $panelId = 'panel-' . $panelPriority;
-
-            $wp_customize->add_panel($panelId, array(
-                'priority'    => $panelPriority,
-                'title'       => Strings::translate($panelProps['title']),
-                'description' => Strings::translate($panelProps['description'])
-            ));
+            if (isset($panelProps['title'])) {
+                $panelId = 'panel-' . $panelPriority;
+                $wp_customize->add_panel($panelId, array(
+                    'priority'    => $panelPriority,
+                    'title'       => Strings::translate($panelProps['title']),
+                    'description' => Strings::translate($panelProps['description'])
+                ));
+            } else {
+                $panelId = $defaultPanel['id'];
+            }
 
             $sectionPriority = 10;
             foreach ($panelProps['sections'] as $sectionId => $sectionProps) {
