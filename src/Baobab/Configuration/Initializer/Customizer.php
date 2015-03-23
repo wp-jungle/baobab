@@ -71,7 +71,22 @@ class Customizer extends AbstractInitializer
     public function registerControls($controls)
     {
         $data = $this->getData();
-        return array_merge($controls, $data['controls']);
+        $customControls = $data['controls'];
+        foreach ($customControls as &$c) {
+            $c['label'] = $this->translateValueIfKeyExists($c, 'label');
+            $c['description'] = $this->translateValueIfKeyExists($c, 'description');
+            $c['default'] = $this->translateValueIfKeyExists($c, 'default');
+            $c['help'] = $this->translateValueIfKeyExists($c, 'help');
+
+            if (isset($c['choices'])) {
+                foreach ($c['choices'] as $id => $label) {
+                    if (isset($label)) {
+                        $c['choices'][$id] = Strings::translate($label);
+                    }
+                }
+            }
+        }
+        return array_merge($controls, $customControls);
     }
 
     /**
@@ -93,7 +108,7 @@ class Customizer extends AbstractInitializer
         ));
 
         $existingSections = $wp_customize->sections();
-        /** @var WP_Customize_Section $section */
+        /** @var \WP_Customize_Section $section */
         foreach ($existingSections as $sectionId => $section) {
             if (empty($section->panel)) {
                 $section->panel = $defaultPanel['id'];
@@ -132,5 +147,19 @@ class Customizer extends AbstractInitializer
         }
 
         return $wp_customize;
+    }
+
+    /**
+     * Helper function to translate an array value if it is effectively defined
+     * @param array $array the container
+     * @param mixed $key the array key
+     * @return null|string the translated value
+     */
+    private function translateValueIfKeyExists(&$array, $key)
+    {
+        if (isset($array[$key])) {
+            return Strings::translate($array[$key]);
+        }
+        return null;
     }
 }
