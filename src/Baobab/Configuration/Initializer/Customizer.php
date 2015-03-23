@@ -2,14 +2,10 @@
 
 namespace Baobab\Configuration\Initializer;
 
-use Baobab\Blade\Extension;
-use Baobab\Blade\WordPressLoopExtension;
-use Baobab\Facade\Baobab;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Paths;
 use Baobab\Helper\Strings;
 use Baobab\Helper\Urls;
-use Philo\Blade\Blade;
 
 /**
  * Class Customizer
@@ -25,7 +21,7 @@ class Customizer extends AbstractInitializer
         'color_light'   => '#8cddcd',
         'color_select'  => '#34495e',
         'color_accent'  => '#FF5740',
-        'color_back'    => '#222',
+        'color_back'    => '#444',
         'stylesheet_id' => 'shoestrap',
     );
 
@@ -38,6 +34,12 @@ class Customizer extends AbstractInitializer
     public function __construct($id, $data)
     {
         parent::__construct($id, $data);
+
+        // Boostrap Kirki
+
+        /** @noinspection PhpIncludeInspection */
+        require_once(Paths::baobabFramework('vendor/aristath/kirki/kirki.php'));
+
         Hooks::filter('kirki/config', $this, 'configureKirki');
         Hooks::filter('customize_register', $this, 'createPanels');
         Hooks::filter('kirki/controls', $this, 'registerControls');
