@@ -82,7 +82,7 @@ class Customizer extends AbstractInitializer
         $data = $this->getData();
         $panels = $data['panels'];
 
-        $panelPriority = 10;
+        $panelPriority = 1000;
 
         foreach ($panels as $panelProps) {
             $panelId = 'panel-' . $panelPriority;
