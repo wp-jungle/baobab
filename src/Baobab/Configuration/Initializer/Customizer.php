@@ -17,11 +17,11 @@ class Customizer extends AbstractInitializer
 {
 
     private static $OPTIONS_DEFAULTS = array(
-        'color_active'  => '#1abc9c',
+        'color_active'  => '#222',
         'color_light'   => '#8cddcd',
         'color_select'  => '#34495e',
         'color_accent'  => '#FF5740',
-        'color_back'    => '#343434',
+        'color_back'    => '#111',
         'stylesheet_id' => 'shoestrap',
         'default_panel' => array(
             'panel-default' => 'General settings'
