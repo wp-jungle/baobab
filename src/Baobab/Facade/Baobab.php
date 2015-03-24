@@ -29,6 +29,27 @@ class Baobab
     private static $ajax = null;
 
     /**
+     * Get the environment we are running in
+     */
+    public static function environment()
+    {
+        if ( !defined('BAOBAB_ENV'))
+        {
+            if (defined('WP_ENV'))
+            {
+                define('BAOBAB_ENV', WP_ENV);
+            }
+            else
+            {
+                define('BAOBAB_ENV', 'production');
+            }
+        }
+
+        /** @noinspection PhpUndefinedConstantInspection */
+        return BAOBAB_ENV;
+    }
+
+    /**
      * @return Configuration
      */
     public static function configuration()
