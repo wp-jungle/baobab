@@ -107,4 +107,21 @@ class Paths
 
         return $path;
     }
+
+    /**
+     * @param string $innerPath The path to append to the directory without leading slash
+     *
+     * @return string The absolute path to the vendor directory
+     */
+    public static function vendors($innerPath = '')
+    {
+        $path = untrailingslashit(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
+
+        if (!empty($innerPath)) {
+            $innerPath = untrailingslashit($innerPath);
+            $path .= '/' . $innerPath;
+        }
+
+        return $path;
+    }
 }

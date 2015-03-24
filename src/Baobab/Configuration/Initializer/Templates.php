@@ -35,7 +35,7 @@ class Templates extends AbstractInitializer
         // If blade is enabled, include required files
         if ($this->isBladeEnabled())
         {
-            require_once(Paths::baobabFramework('vendor/autoload.php'));
+            require_once(Paths::vendors('autoload.php'));
         }
 
         // Our themes should be properly structured, so we could also provide some common templates within a

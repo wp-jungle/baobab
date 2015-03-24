@@ -28,7 +28,7 @@ class Dependencies extends AbstractInitializer
     {
         parent::__construct($id, $data);
 
-        require_once(Paths::baobabFramework('vendor/tgm/plugin-activation/class-tgm-plugin-activation.php'));
+        require_once(Paths::vendors('tgm/plugin-activation/class-tgm-plugin-activation.php'));
         Hooks::action('tgmpa_register', $this, 'configureTgmPluginActivationLibrary');
     }
 
