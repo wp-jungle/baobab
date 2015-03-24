@@ -5,17 +5,24 @@ namespace Baobab\Configuration\Initializer;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Strings;
 
+/**
+ * Class ImageSizes
+ * @package Baobab\Configuration\Initializer
+ *
+ *          Initialises all the theme's image sizes
+ */
 class ImageSizes extends AbstractInitializer
 {
 
     /**
      * Constructor
      *
-     * @param array $data The configuration key/value pairs
+     * @param string $id   The ID of the initializer
+     * @param array  $data The configuration key/value pairs
      */
-    public function __construct($data)
+    public function __construct($id, $data)
     {
-        parent::__construct($data);
+        parent::__construct($id, $data);
     }
 
     /**
@@ -67,6 +74,9 @@ class ImageSizes extends AbstractInitializer
             }
 
             $new[$slug] = isset($props['mediaLabel']) ? $props['mediaLabel'] : Strings::labelizeSlug($slug);
+
+            // Internationalize what has to be
+            $new[$slug] = Strings::translate($new[$slug]);
         }
 
         return array_merge($sizes, $new);

@@ -71,6 +71,57 @@ class Paths
             $path .= '/' . $innerPath;
         }
 
-        return apply_filters('baobab/paths/config', self::theme($path), $innerPath);
+        return apply_filters('baobab/paths/configuration', self::theme($path), $innerPath);
+    }
+
+    /**
+     * @param string $innerPath The path to append to the theme directory without leading slash
+     *
+     * @return string The absolute path to the views folder for the theme
+     */
+    public static function views($innerPath = '')
+    {
+        $path = 'app/views';
+
+        if (!empty($innerPath)) {
+            $innerPath = untrailingslashit($innerPath);
+            $path .= '/' . $innerPath;
+        }
+
+        return apply_filters('baobab/paths/views', self::theme($path), $innerPath);
+    }
+
+    /**
+     * @param string $innerPath The path to append to the directory without leading slash
+     *
+     * @return string The absolute path to the baobab framework
+     */
+    public static function baobabFramework($innerPath = '')
+    {
+        $path = untrailingslashit(dirname(dirname(dirname(dirname(__FILE__)))));
+
+        if (!empty($innerPath)) {
+            $innerPath = untrailingslashit($innerPath);
+            $path .= '/' . $innerPath;
+        }
+
+        return $path;
+    }
+
+    /**
+     * @param string $innerPath The path to append to the directory without leading slash
+     *
+     * @return string The absolute path to the vendor directory
+     */
+    public static function vendors($innerPath = '')
+    {
+        $path = untrailingslashit(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
+
+        if (!empty($innerPath)) {
+            $innerPath = untrailingslashit($innerPath);
+            $path .= '/' . $innerPath;
+        }
+
+        return $path;
     }
 }

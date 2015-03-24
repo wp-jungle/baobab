@@ -1,14 +1,14 @@
 {
     "name": "marvinlabs/baobab",
     "type": "library",
-    "description": "Doctrine2 behavioral extensions",
+    "description": "A WordPress theme framework with a twist",
     "homepage": "http://marvinlabs.com/",
     "license": "Apache v2",
     "authors": [
         {
-            "name" : "Thomas Lartaud",
-            "email" : "contact@thomaslartaud.com",
-            "homepage" : "http://thomaslartaud.com/"
+            "name" : "MarvinLabs",
+            "email" : "contact@marvinlabs.com",
+            "homepage" : "http://marvinlabs.com/"
         },
         {
             "name" : "Vincent Mimoun-Prat",
@@ -17,7 +17,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.3",
+        "philo/laravel-blade": "~2.1",
+		"aristath/kirki": "dev-master",
+        "tgm/plugin-activation" : "~2.4.0"
     },
     "autoload": {
         "psr-0": { "Baobab\\": "src/" }
