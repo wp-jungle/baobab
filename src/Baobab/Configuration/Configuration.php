@@ -6,6 +6,7 @@ use Baobab\Configuration\Exception\ConfigurationNotFoundException;
 use Baobab\Configuration\Exception\UnknownSectionException;
 use Baobab\Configuration\Initializer\Initializer;
 use Baobab\Configuration\Parser\PhpParser;
+use Baobab\Facade\Baobab;
 use Baobab\Helper\Hooks;
 use Baobab\Helper\Paths;
 use Baobab\Theme\Exception\ThemeDeclarationException;
@@ -27,7 +28,7 @@ class Configuration
     /**
      * Create the theme configuration. The object will be created and configuration files will be parsed.
      *
-     * @param array $mapping The mapping between configuration files and classes. Some default values are provided and
+     * @param array $mapping   The mapping between configuration files and classes. Some default values are provided and
      *                         the parameter will be merged with the default mappings.
      *
      * @return Configuration The configuration object
@@ -70,19 +71,41 @@ class Configuration
         );
 
         // Parse each file
-        foreach ($mapping as $file => $className) {
-            $fullPath = Paths::configuration($file);
-            $data = null;
+        $configRoot = Paths::configuration();
+        $env = Baobab::environment();
+        foreach ($mapping as $file => $className)
+        {
+            $fileLoaded = false;
+            $data = array();
 
-            /** @var \Baobab\Configuration\Parser\Parser $parser */
-            foreach ($parsers as $ext => $parser) {
-                if (file_exists($fullPath . '.' . $ext)) {
-                    $data = $parser->parse($fullPath);
-                    break;
+            $pathStack = array(
+                $configRoot . '/' . $env . '/' . $file,
+                $configRoot . '/' . $file
+            );
+
+            foreach ($pathStack as $fullPath)
+            {
+                $tempData = null;
+
+                /** @var \Baobab\Configuration\Parser\Parser $parser */
+                foreach ($parsers as $ext => $parser)
+                {
+                    if (file_exists($fullPath . '.' . $ext))
+                    {
+                        $fileLoaded = true;
+                        $tempData = $parser->parse($fullPath);
+                        break;
+                    }
+                }
+
+                if ($tempData != null)
+                {
+                    $data = array_merge($tempData, $data);
                 }
             }
 
-            if ($data != null) {
+            if ($fileLoaded)
+            {
                 $this->initializers[$file] = new $className($file, $data);
 
                 // Provide some hooks
@@ -96,7 +119,8 @@ class Configuration
      */
     public function apply()
     {
-        foreach ($this->initializers as $id => $initializer) {
+        foreach ($this->initializers as $id => $initializer)
+        {
             do_action('baobab/configuration/before-initializer?id=' . $id);
             $initializer->run();
             do_action('baobab/configuration/after-initializer?id=' . $id);
@@ -107,13 +131,14 @@ class Configuration
      * Get the value of a setting in the configuration. If that setting is not found, an exception will be thrown.
      *
      * @param string $section The configuration section where to find the setting
-     * @param string $key The key of the setting we are interested about
+     * @param string $key     The key of the setting we are interested about
      *
      * @return mixed The setting value
      */
     public function getOrThrow($section, $key)
     {
-        if (!isset($this->initializers[$section])) {
+        if ( !isset($this->initializers[$section]))
+        {
             throw new UnknownSectionException($section);
         }
 
@@ -124,15 +149,16 @@ class Configuration
      * Get the value of a setting in the configuration. If that setting is not found, return the provided
      * default value.
      *
-     * @param string $section The configuration section where to find the setting
-     * @param string $key The key of the setting we are interested about
-     * @param mixed $defaultValue The default value to return if not found
+     * @param string $section      The configuration section where to find the setting
+     * @param string $key          The key of the setting we are interested about
+     * @param mixed  $defaultValue The default value to return if not found
      *
      * @return mixed The setting value or the default value
      */
     public function get($section, $key, $defaultValue = null)
     {
-        if (!isset($this->initializers[$section])) {
+        if ( !isset($this->initializers[$section]))
+        {
             return $defaultValue;
         }
 
