@@ -41,7 +41,7 @@ class WordPressQueryExtension implements Extension
             function ($view, $comp)
             {
                 $pattern = $comp->createMatcher('wpquery');
-                $replacement = '$1<?php if ( $2->have_posts() ) : while ( $2->have_posts() ) : $2->the_post(); ?> ';
+                $replacement = '$1<?php $__tmp = $2; if ( $__tmp->have_posts() ) : while ( $__tmp->have_posts() ) : $__tmp->the_post(); ?> ';
 
                 return preg_replace($pattern, $replacement, $view);
             });
