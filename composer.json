@@ -20,7 +20,7 @@
         "php": ">=5.3",
         "philo/laravel-blade": "~2.1",
 		"aristath/kirki": "dev-master#090c0cedc4c23e1328449f039cf974a44cc24fcd",
-        "tgm/plugin-activation" : "~2.4.0"
+        "tgmpa/plugin-activation" : "~2.6.1"
     },
     "autoload": {
         "psr-0": { "Baobab\\": "src/" }
