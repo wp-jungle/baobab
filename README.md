@@ -47,7 +47,7 @@ switch themes? All your analytics settings - and worse - all your portfolio item
 is no longer declared.
  
 So we need a good way to declare that our theme requires or recommends the use of this and that plugin. Well, 
-[TGM Plugin Activation]() is a well known library that does this thing for quite some time now. And they do it well. So
+[TGM Plugin Activation](https://github.com/TGMPA/TGM-Plugin-Activation) is a well known library that does this thing for quite some time now. And they do it well. So
 we integrated it to Baobab and take care of all the boiler-plate code for you. Just specify your dependencies in the 
 corresponding configuration file.
 
