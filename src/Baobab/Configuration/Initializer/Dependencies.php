@@ -76,7 +76,7 @@ class Dependencies extends AbstractInitializer
         );
 
         // Merge user configuration with defaults
-        $config = isset($data['options']) ? array_merge_recursive($defaults, $data['options']) : $defaults;
+        $config = isset($data['options']) ? array_merge($defaults, $data['options']) : $defaults;
 
         tgmpa($data['plugins'], $config);
     }
