@@ -31,20 +31,9 @@ class WordPressQueryExtension implements Extension
      */
     private function registerStartLoopQuery($compiler)
     {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp)
-            {
-                $pattern = $comp->createMatcher('wpquery');
-                $replacement = '$1<?php if ( $2->have_posts() ) : while ( $2->have_posts() ) : $2->the_post(); ?> ';
-
-                return preg_replace($pattern, $replacement, $view);
-            });
+        $compiler->directive('wpquery', function ($expression) {
+            return "<?php \$__tmp = with{$expression}; if ( \$__tmp->have_posts() ) : while ( \$__tmp->have_posts() ) : \$__tmp->the_post(); ?>";
+        });
     }
 
     /**
@@ -54,20 +43,9 @@ class WordPressQueryExtension implements Extension
      */
     private function registerEmptyLoopBranch($compiler)
     {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp)
-            {
-                $pattern = $comp->createPlainMatcher('emptywpquery');
-                $replacement = '$1<?php endwhile; ?><?php else: ?>';
-
-                return preg_replace($pattern, $replacement, $view);
-            });
+        $compiler->directive('emptywpquery', function ($expression) {
+            return "<?php endwhile; ?><?php else: ?>";
+        });
     }
 
     /**
@@ -77,19 +55,8 @@ class WordPressQueryExtension implements Extension
      */
     private function registerEndLoop($compiler)
     {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp)
-            {
-                $pattern = $comp->createPlainMatcher('endwpquery');
-                $replacement = '$1<?php endif; wp_reset_postdata(); ?>';
-
-                return preg_replace($pattern, $replacement, $view);
-            });
+        $compiler->directive('endwpquery', function ($expression) {
+            return "<?php endif; wp_reset_postdata(); ?>";
+        });
     }
 }
