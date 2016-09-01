@@ -32,19 +32,9 @@ class WordPressLoopExtension implements Extension
      */
     private function registerStartLoopQuery($compiler)
     {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp) {
-                $pattern = $comp->createPlainMatcher('wploop');
-                $replacement = '$1<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?> ';
-
-                return preg_replace($pattern, $replacement, $view);
-            });
+        $compiler->directive('wploop', function ($expression) {
+            return "<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>";
+        });
     }
 
     /**
@@ -54,19 +44,9 @@ class WordPressLoopExtension implements Extension
      */
     private function registerEmptyLoopBranch($compiler)
     {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp) {
-                $pattern = $comp->createPlainMatcher('emptywploop');
-                $replacement = '$1<?php endwhile; ?><?php else: ?>';
-
-                return preg_replace($pattern, $replacement, $view);
-            });
+        $compiler->directive('emptywploop', function ($expression) {
+            return "<?php endwhile; ?><?php else: ?>";
+        });
     }
 
     /**
@@ -76,18 +56,8 @@ class WordPressLoopExtension implements Extension
      */
     private function registerEndLoop($compiler)
     {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp) {
-                $pattern = $comp->createPlainMatcher('endwploop');
-                $replacement = '$1<?php endif; wp_reset_postdata(); ?>';
-
-                return preg_replace($pattern, $replacement, $view);
-            });
+        $compiler->directive('endwploop', function ($expression) {
+            return "<?php endif; wp_reset_postdata(); ?>";
+        });
     }
 }
