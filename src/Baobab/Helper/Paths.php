@@ -115,7 +115,11 @@ class Paths
      */
     public static function vendors($innerPath = '')
     {
-        $path = untrailingslashit(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
+        if (defined('BAOBAB_COMPOSER_DIR')) {
+            $path = untrailingslashit(BAOBAB_COMPOSER_DIR);
+        } else {
+            $path = untrailingslashit(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
+        }
 
         if (!empty($innerPath)) {
             $innerPath = untrailingslashit($innerPath);
