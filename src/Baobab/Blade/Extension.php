@@ -6,6 +6,7 @@ use Illuminate\View\Compilers\BladeCompiler;
 
 /**
  * Interface Extension
+ *
  * @package Baobab\Blade
  *
  *          Extend the blade compiler

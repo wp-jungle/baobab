@@ -37,8 +37,7 @@ class RawPhpExtension implements Extension
          *
          * @return string The compiled view
          */
-            function ($view, $comp)
-            {
+            function ($view, $comp) {
                 return preg_replace('/#\{\{\s*(.+?)\s*\}\}/s', '<?php $1; ?>', $view);
             });
     }

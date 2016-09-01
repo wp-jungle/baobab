@@ -38,8 +38,7 @@ class WordPressQueryExtension implements Extension
          *
          * @return string The compiled view
          */
-            function ($view, $comp)
-            {
+            function ($view, $comp) {
                 $pattern = $comp->createMatcher('wpquery');
                 $replacement = '$1<?php $__tmp = $2; if ( $__tmp->have_posts() ) : while ( $__tmp->have_posts() ) : $__tmp->the_post(); ?> ';
 
@@ -61,8 +60,7 @@ class WordPressQueryExtension implements Extension
          *
          * @return string The compiled view
          */
-            function ($view, $comp)
-            {
+            function ($view, $comp) {
                 $pattern = $comp->createPlainMatcher('emptywpquery');
                 $replacement = '$1<?php endwhile; ?><?php else: ?>';
 
@@ -84,8 +82,7 @@ class WordPressQueryExtension implements Extension
          *
          * @return string The compiled view
          */
-            function ($view, $comp)
-            {
+            function ($view, $comp) {
                 $pattern = $comp->createPlainMatcher('endwpquery');
                 $replacement = '$1<?php endif; wp_reset_postdata(); ?>';
 

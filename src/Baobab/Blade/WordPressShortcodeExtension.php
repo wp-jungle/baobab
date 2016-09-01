@@ -37,8 +37,7 @@ class WordPressShortcodeExtension implements Extension
          *
          * @return string The compiled view
          */
-            function ($view, $comp)
-            {
+            function ($view, $comp) {
                 $pattern = $comp->createMatcher('shortcode');
                 $replacement = '$1<?php do_shortcode($2); ?> ';
 
