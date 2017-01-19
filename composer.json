@@ -24,11 +24,5 @@
     },
     "autoload": {
         "psr-0": { "Baobab\\": "src/" }
-    },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git@github.com:tlartaud/TGM-Plugin-Activation.git"
-        }
-    ]
+    }
 }
