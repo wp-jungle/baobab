@@ -141,11 +141,18 @@ class Assets extends AbstractInitializer
             {
                 $props['ver'] = $manifest[$handle]['hash'];
             }
+            
+            // Src can either be a string or a callable
+            $src = $props['src'];
+            if (is_callable($src)) 
+            {
+                $src = $src();
+            }
 
             switch ($actionType)
             {
                 case 'register':
-                    wp_register_style($handle, $props['src'], $props['deps'], $props['ver'], $props['media']);
+                    wp_register_style($handle, $src, $props['deps'], $props['ver'], $props['media']);
                     break;
                 case 'enqueue':
                     wp_enqueue_style($handle);
@@ -188,11 +195,18 @@ class Assets extends AbstractInitializer
             {
                 $props['ver'] = $manifest[$handle]['hash'];
             }
+            
+            // Src can either be a string or a callable
+            $src = $props['src'];
+            if (is_callable($src)) 
+            {
+                $src = $src();
+            }
 
             switch ($actionType)
             {
                 case 'register':
-                    wp_register_script($handle, $props['src'], $props['deps'], $props['ver'], $props['in_footer']);
+                    wp_register_script($handle, $src, $props['deps'], $props['ver'], $props['in_footer']);
                     break;
                 case 'enqueue':
                     wp_enqueue_script($handle);
