@@ -21,6 +21,7 @@ class RawPhpExtension implements Extension
     public function register($compiler)
     {
         $this->registerRawPhpBraces($compiler);
+        $this->registerKeywords($compiler);
     }
 
     /**
@@ -41,4 +42,25 @@ class RawPhpExtension implements Extension
                 return preg_replace('/#\{\{\s*(.+?)\s*\}\}/s', '<?php $1; ?>', $view);
             });
     }
+
+    /**
+     * @shortcode
+     *
+     * @param BladeCompiler $compiler The blade compiler to extend
+     */
+    private function registerKeywords($compiler)
+    {
+        $keywords = [
+            "namespace",
+            "use",
+        ];
+        foreach ($keywords as $keyword) {
+            $compiler->directive($keyword, function ($parameter) use ($keyword) {
+                $parameter = trim($parameter, "()");
+                return "<?php {$keyword} {$parameter} ?>";
+            });
+        }
+    }
+    
+   
 }
