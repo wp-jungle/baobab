@@ -20,27 +20,7 @@ class RawPhpExtension implements Extension
      */
     public function register($compiler)
     {
-        $this->registerRawPhpBraces($compiler);
         $this->registerKeywords($compiler);
-    }
-
-    /**
-     * @shortcode
-     *
-     * @param BladeCompiler $compiler The blade compiler to extend
-     */
-    private function registerRawPhpBraces($compiler)
-    {
-        $compiler->extend(
-        /**
-         * @param string        $view The view currently being rendered
-         * @param BladeCompiler $comp The compiler currently used
-         *
-         * @return string The compiled view
-         */
-            function ($view, $comp) {
-                return preg_replace('/#\{\{\s*(.+?)\s*\}\}/s', '<?php $1; ?>', $view);
-            });
     }
 
     /**
