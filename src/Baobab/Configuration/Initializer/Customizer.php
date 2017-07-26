@@ -44,7 +44,7 @@ class Customizer extends AbstractInitializer
         Hooks::filter('kirki/controls', $this, 'registerControls');
 
         /** @noinspection PhpIncludeInspection */
-        require_once(Paths::vendors('aristath/kirki/kirki.php'));
+        require_once(Paths::vendors('kirki/kirki.php'));
     }
 
     /**
@@ -54,7 +54,7 @@ class Customizer extends AbstractInitializer
     {
         // These cannot be setup above directly, do it now
         self::$OPTIONS_DEFAULTS['logo_image'] = Urls::assets('images/admin/customizer.png');
-        self::$OPTIONS_DEFAULTS['url_path'] = Urls::baobabFramework('vendor/aristath/kirki/');
+        self::$OPTIONS_DEFAULTS['url_path'] = Urls::baobabFramework('vendor/kirki/');
         // Todo pull description from somewhere where it is already defined
         self::$OPTIONS_DEFAULTS['description'] = Strings::translate('This is the theme description');
 
